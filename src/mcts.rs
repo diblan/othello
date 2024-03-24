@@ -40,7 +40,7 @@ impl<G: Game, B: AutodiffBackend> MCTS<G, B> {
     /// Returns:
     ///     probs: a policy vector where the probability of the ith action is
     ///            proportional to Nsa[(s,a)]**(1./temp)
-    pub fn get_action_prob(&mut self, canonical_board: &Vec<Vec<i8>>, temp: u8) -> Vec<f32> {
+    pub fn get_action_prob(&mut self, canonical_board: &Vec<i8>, temp: u8) -> Vec<f32> {
         for _i in 0..self.args.get("numMCTSSims").unwrap().parse().unwrap() {
             self.search(canonical_board);
         }
@@ -93,7 +93,7 @@ impl<G: Game, B: AutodiffBackend> MCTS<G, B> {
     ///
     /// Returns:
     ///     v: the negative of the value of the current canonicalBoard
-    fn search(&mut self, canonical_board: &Vec<Vec<i8>>) -> f32 {
+    fn search(&mut self, canonical_board: &Vec<i8>) -> f32 {
         let s = self.game.string_representation(canonical_board);
 
         if !self.es.contains_key(&s) {

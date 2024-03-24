@@ -20,7 +20,7 @@ pub trait NeuralNet<B: AutodiffBackend, G: Game> {
     ///               (board, pi, v). pi is the MCTS informed policy vector for
     ///               the given board, and v is its value. The examples has
     ///               board in its canonical form.
-    fn train(&self, examples: &Vec<(Vec<Vec<i8>>, Vec<f32>, i8)>);
+    fn train(&self, examples: &Vec<(Vec<i8>, Vec<f32>, i8)>);
 
     /// Input:
     /// board: current board in its canonical form.
@@ -29,7 +29,7 @@ pub trait NeuralNet<B: AutodiffBackend, G: Game> {
     ///     pi: a policy vector for the current board- a numpy array of length
     ///         game.getActionSize
     ///     v: a float in [-1,1] that gives the value of the current board
-    fn predict(&self, board: &Vec<Vec<i8>>) -> (Vec<f32>, f32);
+    fn predict(&self, board: &Vec<i8>) -> (Vec<f32>, f32);
 
     /// Saves the current neural network (with its parameters) in
     /// folder/filename

@@ -2,10 +2,10 @@ use crate::game::Game;
 
 pub struct Arena<'a, F, F2, G, D>
 where
-    F: FnMut(&Vec<Vec<i8>>) -> usize,
-    F2: FnMut(&Vec<Vec<i8>>) -> usize,
+    F: FnMut(&Vec<i8>) -> usize,
+    F2: FnMut(&Vec<i8>) -> usize,
     G: Game,
-    D: Fn(&Vec<Vec<i8>>),
+    D: Fn(&Vec<i8>, usize),
 {
     player1: F,
     player2: F2,
@@ -16,10 +16,10 @@ where
 /// An Arena class where any 2 agents can be pit against each other.
 impl<'a, F, F2, G, D> Arena<'a, F, F2, G, D>
 where
-    F: FnMut(&Vec<Vec<i8>>) -> usize,
-    F2: FnMut(&Vec<Vec<i8>>) -> usize,
+    F: FnMut(&Vec<i8>) -> usize,
+    F2: FnMut(&Vec<i8>) -> usize,
     G: Game,
-    D: Fn(&Vec<Vec<i8>>),
+    D: Fn(&Vec<i8>, usize),
 {
     /// Input:
     ///     player 1,2: two functions that takes board as input, return action
@@ -54,7 +54,7 @@ where
             it += 1;
             if verbose {
                 println!("Turn {:?} Player {:?}", it, cur_player);
-                (self.display)(&board);
+                (self.display)(&board, self.game.get_board_size().0 as usize);
             }
             let canon = self.game.get_canonical_form(&board, cur_player);
             let action = if cur_player == 1 {
@@ -79,7 +79,7 @@ where
                 "Game over: Turn {it} Result {:?}",
                 self.game.get_game_ended(&board, 1)
             );
-            (self.display)(&board);
+            (self.display)(&board, self.game.get_board_size().0 as usize);
         }
         return cur_player * self.game.get_game_ended(&board, cur_player);
     }

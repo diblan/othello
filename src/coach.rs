@@ -21,7 +21,7 @@ where
     pnet: NNetWrapper<B, G>,
     args: HashMap<String, String>,
     mcts: MCTS<G, B>,
-    training_examples_history: VecDeque<Vec<(Vec<Vec<i8>>, Vec<f32>, i8)>>,
+    training_examples_history: VecDeque<Vec<(Vec<i8>, Vec<f32>, i8)>>,
     skip_first_self_play: bool,
 }
 
@@ -47,8 +47,8 @@ where
         }
     }
 
-    fn execute_episode(&mut self) -> Vec<(Vec<Vec<i8>>, Vec<f32>, i8)> {
-        let mut train_examples = Vec::<(Vec<Vec<i8>>, Vec<f32>, i8)>::new();
+    fn execute_episode(&mut self) -> Vec<(Vec<i8>, Vec<f32>, i8)> {
+        let mut train_examples = Vec::<(Vec<i8>, Vec<f32>, i8)>::new();
         let mut board = self.game.get_init_board().clone();
         let mut cur_player = 1;
         let mut episode_step = 0;
@@ -115,7 +115,7 @@ where
             // examples of the iteration
             if !&self.skip_first_self_play || i > 1 {
                 println!("Not skipping first self play");
-                let mut iteration_train_examples: VecDeque<Vec<(Vec<Vec<i8>>, Vec<f32>, i8)>> =
+                let mut iteration_train_examples: VecDeque<Vec<(Vec<i8>, Vec<f32>, i8)>> =
                     VecDeque::with_capacity(maxlen_of_queue);
 
                 for _j in 0..num_eps {
@@ -155,7 +155,7 @@ where
             let mut nmcts = MCTS::new(self.game.clone(), self.nnet.clone(), self.args.clone());
 
             println!("PITTING AGAINST PREVIOUS VERSION");
-            let lambda1 = |x: &Vec<Vec<i8>>| {
+            let lambda1 = |x: &Vec<i8>| {
                 let pi = pmcts.get_action_prob(x, 0);
                 let max = pi.iter().cloned().fold(0. / 0., f32::max);
                 let mut best_as = Vec::new();
@@ -166,7 +166,7 @@ where
                 }
                 return best_as.first().unwrap().to_owned();
             };
-            let lambda2 = |x: &Vec<Vec<i8>>| {
+            let lambda2 = |x: &Vec<i8>| {
                 let pi = nmcts.get_action_prob(x, 0);
                 let max = pi.iter().cloned().fold(0. / 0., f32::max);
                 let mut best_as = Vec::new();

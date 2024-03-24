@@ -77,12 +77,10 @@ impl BoardMath {
         b
     }
 
-    pub fn apply_2d(b: &Vec<Vec<i8>>, t: &Vec<Vec<(usize, usize)>>) -> Vec<Vec<i8>> {
+    pub fn apply_1d_i8(b: &Vec<i8>, t: &Vec<usize>) -> Vec<i8> {
         let mut r = b.clone();
-        for x in 0..b.len() {
-            for y in 0..b[x].len() {
-                r[x][y] = b[t[x][y].0][t[x][y].1];
-            }
+        for x in 0..t.len() {
+            r[x] = b[t[x]];
         }
         r
     }

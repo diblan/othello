@@ -49,7 +49,7 @@ impl<G: Game, B: AutodiffBackend> NeuralNet<B, G> for NNetWrapper<B, G> {
         }
     }
 
-    fn train(&self, examples: &Vec<(Vec<Vec<i8>>, Vec<f32>, i8)>) {
+    fn train(&self, examples: &Vec<(Vec<i8>, Vec<f32>, i8)>) {
         let mut optimizer = AdamConfig::new().init();
 
         for epoch in 0..self.epochs {
@@ -64,19 +64,18 @@ impl<G: Game, B: AutodiffBackend> NeuralNet<B, G> for NNetWrapper<B, G> {
                     .sample_iter(distr)
                     .take(self.batch_size)
                     .collect();
-                // let sample_ids: usize =
-                //     rand::thread_rng().gen_range(examples.len()..self.batch_size as usize);
 
+                // TODO hard coded dimension 6 is not OK
                 let mut boards_array: [[[f64; 6]; 6]; 64] = [[[1.0; 6]; 6]; 64];
                 let mut pis_vec = Vec::<f32>::with_capacity(64 * 6 * 6);
                 let mut vs_vec: Vec<f32> = Vec::<f32>::with_capacity(64);
                 for i in 0..sample_ids.len() {
                     let example = examples.get(sample_ids[i]).unwrap();
                     let board = example.clone().0;
-                    for j in 0..board.len() {
-                        for k in 0..board.len() {
+                    for j in 0..6 {
+                        for k in 0..6 {
                             boards_array[i][j][k] =
-                                f64::from(board.get(j).unwrap().get(k).unwrap().to_owned());
+                                f64::from(board.get(j * 6 + k).unwrap().to_owned());
                         }
                     }
 
@@ -116,15 +115,13 @@ impl<G: Game, B: AutodiffBackend> NeuralNet<B, G> for NNetWrapper<B, G> {
     }
 
     /// board: np array with board
-    fn predict(&self, board: &Vec<Vec<i8>>) -> (Vec<f32>, f32) {
+    fn predict(&self, board: &Vec<i8>) -> (Vec<f32>, f32) {
         // timing
         // start = time.time()
 
         let mut floats: Vec<f32> = Vec::with_capacity(36);
-        for inner in board {
-            for i in inner {
-                floats.push(i.clone() as f32);
-            }
+        for x in board {
+            floats.push(x.clone() as f32);
         }
         let shape = Shape::new([1, 6, 6]);
         let data = Data::<f32, 3>::new(floats, shape).convert();

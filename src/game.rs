@@ -11,7 +11,7 @@ pub trait Game {
     /// Returns:
     ///     startBoard: a representation of the board (ideally this is the form
     ///                 that will be the input to your neural network)
-    fn get_init_board(&self) -> &Vec<Vec<i8>>;
+    fn get_init_board(&self) -> &Vec<i8>;
 
     /// Returns:
     ///     (x,y): a tuple of board dimensions
@@ -29,7 +29,7 @@ pub trait Game {
     /// Returns:
     ///     nextBoard: board after applying action
     ///     nextPlayer: player who plays in the next turn (should be -player)
-    fn get_next_state(&self, board: &Vec<Vec<i8>>, player: i8, action: u8) -> (Vec<Vec<i8>>, i8);
+    fn get_next_state(&self, board: &Vec<i8>, player: i8, action: u8) -> (Vec<i8>, i8);
 
     /// Input:
     ///     board: current board
@@ -39,7 +39,7 @@ pub trait Game {
     ///     validMoves: a binary vector of length self.getActionSize(), 1 for
     ///                 moves that are valid from the current board and player,
     ///                 0 for invalid moves
-    fn get_valid_moves(&self, board: &Vec<Vec<i8>>, player: i8) -> Vec<u8>;
+    fn get_valid_moves(&self, board: &Vec<i8>, player: i8) -> Vec<u8>;
 
     /// Input:
     ///     board: current board
@@ -48,7 +48,7 @@ pub trait Game {
     /// Returns:
     ///     r: 0 if game has not ended. 1 if player won, -1 if player lost,
     ///        small non-zero value for draw.
-    fn get_game_ended(&self, board: &Vec<Vec<i8>>, player: i8) -> i8;
+    fn get_game_ended(&self, board: &Vec<i8>, player: i8) -> i8;
 
     /// Input:
     ///     board: current board
@@ -61,7 +61,7 @@ pub trait Game {
     ///                     of white. When the player is white, we can return
     ///                     board as is. When the player is black, we can invert
     ///                     the colors and return the board.
-    fn get_canonical_form(&self, board: &Vec<Vec<i8>>, player: i8) -> Vec<Vec<i8>>;
+    fn get_canonical_form(&self, board: &Vec<i8>, player: i8) -> Vec<i8>;
 
     /// Input:
     ///     board: current board
@@ -71,7 +71,7 @@ pub trait Game {
     ///     symmForms: a list of [(board,pi)] where each tuple is a symmetrical
     ///                     form of the board and the corresponding pi vector. This
     ///                     is used when training the neural network from examples.
-    fn get_symmetries(&self, board: &Vec<Vec<i8>>, pi: &Vec<f32>) -> Vec<(Vec<Vec<i8>>, Vec<f32>)>;
+    fn get_symmetries(&self, board: &Vec<i8>, pi: &Vec<f32>) -> Vec<(Vec<i8>, Vec<f32>)>;
 
     /// Input:
     ///     board: current board
@@ -79,5 +79,5 @@ pub trait Game {
     /// Returns:
     ///     boardString: a quick conversion of board to a string format.
     ///                  Required by MCTS for hashing.
-    fn string_representation(&self, board: &Vec<Vec<i8>>) -> String;
+    fn string_representation(&self, board: &Vec<i8>) -> String;
 }

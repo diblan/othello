@@ -8,7 +8,7 @@ fn get_init_board_4() {
     let othello = Othello::new(4);
     let init_board = othello.get_init_board();
     let init_board_str = format!("{:?}", init_board);
-    let expected_board = "[[0, 0, 0, 0], [0, -1, 1, 0], [0, 1, -1, 0], [0, 0, 0, 0]]";
+    let expected_board = "[0, 0, 0, 0, 0, -1, 1, 0, 0, 1, -1, 0, 0, 0, 0, 0]";
     assert_eq!(init_board_str, expected_board);
 }
 
@@ -17,7 +17,7 @@ fn get_init_board_6() {
     let othello = Othello::new(6);
     let init_board = othello.get_init_board();
     let init_board_str = format!("{:?}", init_board);
-    let expected_board = "[[0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, -1, 1, 0, 0], [0, 0, 1, -1, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0]]";
+    let expected_board = "[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 1, 0, 0, 0, 0, 1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]";
     assert_eq!(init_board_str, expected_board);
 }
 
@@ -55,13 +55,13 @@ fn get_next_state_4() {
     let board = othello.get_init_board();
     let next_state = othello.get_next_state(board, 1, 1);
     let next_state_str = format!("{:?}", next_state);
-    let expected_next_state = "([[0, 1, 0, 0], [0, 1, 1, 0], [0, 1, -1, 0], [0, 0, 0, 0]], -1)";
+    let expected_next_state = "([0, 1, 0, 0, 0, 1, 1, 0, 0, 1, -1, 0, 0, 0, 0, 0], -1)";
     assert_eq!(next_state_str, expected_next_state.to_string());
 
     let board = &next_state.0;
     let next_state = othello.get_next_state(board, -1, 0);
     let next_state_str = format!("{:?}", next_state);
-    let expected_next_state = "([[-1, 1, 0, 0], [0, -1, 1, 0], [0, 1, -1, 0], [0, 0, 0, 0]], 1)";
+    let expected_next_state = "([-1, 1, 0, 0, 0, -1, 1, 0, 0, 1, -1, 0, 0, 0, 0, 0], 1)";
     assert_eq!(next_state_str, expected_next_state.to_string());
 }
 
@@ -71,7 +71,7 @@ fn get_next_state_illegal() {
     let board = othello.get_init_board();
     let next_state = othello.get_next_state(board, 1, 6);
     let next_state_str = format!("{:?}", next_state);
-    let expected_next_state = "([[0, 1, 0, 0], [0, 1, 1, 0], [0, 1, -1, 0], [0, 0, 0, 0]], -1)";
+    let expected_next_state = "([0, 1, 0, 0, 0, 1, 1, 0, 0, 1, -1, 0, 0, 0, 0, 0], -1)";
     assert_eq!(next_state_str, expected_next_state.to_string());
 }
 
@@ -88,13 +88,7 @@ fn get_valid_moves_4() {
 #[test]
 fn get_game_ended_4() {
     let othello = Othello::new(4);
-    let board = [
-        [0, -1, -1, -1].to_vec(),
-        [-1, -1, 1, -1].to_vec(),
-        [0, -1, -1, -1].to_vec(),
-        [-1, 0, -1, -1].to_vec(),
-    ]
-    .to_vec();
+    let board = [0, -1, -1, -1, -1, -1, 1, -1, 0, -1, -1, -1, -1, 0, -1, -1].to_vec();
     let game_ended = othello.get_game_ended(&board, 1);
     assert_eq!(game_ended, -1);
 }
