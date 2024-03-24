@@ -5,6 +5,7 @@ use rand::{distributions::WeightedIndex, thread_rng};
 use std::collections::{HashMap, VecDeque};
 use std::fs::{self, File};
 use std::io::Write;
+use std::time::SystemTime;
 
 use crate::arena::Arena;
 use crate::othello::Othello;
@@ -109,6 +110,7 @@ where
         for i in 1..num_iters + 1 {
             // bookkeeping
             println!("Starting iter #{:?}", i);
+            let now = SystemTime::now();
 
             // examples of the iteration
             if !&self.skip_first_self_play || i > 1 {
@@ -208,6 +210,17 @@ where
                     .save_checkpoint(&checkpoint, &self.get_checkpoint_file(i.to_string()));
                 self.nnet.save_checkpoint(&checkpoint, "best.pth.tar");
             }
+
+            match now.elapsed() {
+                Ok(elapsed) => {
+                    println!("This iteration took {} seconds", elapsed.as_secs_f32());
+                }
+                Err(e) => {
+                    // an error occurred!
+                    println!("Error: {e:?}");
+                }
+            }
+            break;
         }
     }
 
