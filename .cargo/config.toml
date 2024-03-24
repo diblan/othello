@@ -1,0 +1,6 @@
+[env]
+LIBTORCH_BYPASS_VERSION_CHECK = "true"
+
+[profile.release-with-debug]
+inherits = "release"
+debug = true
