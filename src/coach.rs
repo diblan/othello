@@ -192,7 +192,7 @@ where
 
             println!(
                 "NEW/PREV WINS : {:?} / {:?} ; DRAWS : {:?}",
-                pwins, nwins, draws
+                nwins, pwins, draws
             );
             let update_threshold = self
                 .args
@@ -239,7 +239,12 @@ where
         let _ = buffer.write_all(&serialized);
     }
 
-    // fn load_train_examples(&self) {
-    //     todo!();
-    // }
+    pub fn load_train_examples(&mut self) {
+        let folder = self.args.get("checkpoint").unwrap();
+        let filename = self.args.get("load_examples_file").unwrap();
+        let file_path = format!("{folder}/{filename}");
+        let serialized = fs::read(file_path).unwrap();
+
+        self.training_examples_history = serde_pickle::from_slice::<VecDeque<Vec<(Vec<i8>, Vec<f32>, i8)>>>(&serialized, Default::default()).unwrap();
+    }
 }

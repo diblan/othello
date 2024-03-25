@@ -32,6 +32,7 @@ fn main() {
     args.insert("load_model".to_string(), "true".to_owned());
     args.insert("load_folder".to_string(), "temp".to_owned());
     args.insert("load_folder_file".to_string(), "best.pth.tar".to_owned());
+    args.insert("load_examples_file".to_string(), "checkpoint_3.pth.tar".to_owned());
     args.insert(
         "numItersForTrainExamplesHistory".to_string(),
         "20".to_owned(),
@@ -60,6 +61,10 @@ fn main() {
     let mut c = Coach::new(g.clone(), nnet, device, args);
 
     // TODO potential loading in of training examples
+    if load_model {
+        println!("Loading 'trainExamples' from file...");
+        c.load_train_examples();
+    }
 
     println!("Starting the learning process 🎉");
     c.learn();
