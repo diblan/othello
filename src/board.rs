@@ -34,7 +34,7 @@ impl Board {
         let mut count: i32 = 0;
         for row in &self.pieces {
             for square in row {
-                if square == &color {
+                if *square == color {
                     count += 1;
                 }
                 if *square == -color {

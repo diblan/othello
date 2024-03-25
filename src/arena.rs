@@ -108,9 +108,9 @@ where
         }
         for _ in 0..num {
             let game_result = self.play_game(2, verbose);
-            if game_result == 1 {
+            if game_result == -1 {
                 one_won += 1;
-            } else if game_result == -1 {
+            } else if game_result == 1 {
                 two_won += 1;
             } else {
                 draws += 1;

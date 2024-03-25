@@ -152,7 +152,7 @@ where
             let mut pmcts = MCTS::new(self.game.clone(), self.pnet.clone(), self.args.clone());
 
             self.nnet.train(&train_examples);
-            let mut nmcts = MCTS::new(self.game.clone(), self.pnet.clone(), self.args.clone());
+            let mut nmcts = MCTS::new(self.game.clone(), self.nnet.clone(), self.args.clone());
 
             println!("PITTING AGAINST PREVIOUS VERSION");
             let lambda1 = |x: &Vec<Vec<i8>>| {
@@ -220,7 +220,6 @@ where
                     println!("Error: {e:?}");
                 }
             }
-            break;
         }
     }
 
